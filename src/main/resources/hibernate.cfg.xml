@@ -29,6 +29,6 @@
 
         <!-- Specify the mapping resources -->
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.Usuaris"/>
-        <mapping class="cat.iesesteveterradas.dbapi.persistencia.Propietat"/>
+        <mapping class="cat.iesesteveterradas.dbapi.persistencia.Peticions"/>
     </session-factory>
 </hibernate-configuration>
