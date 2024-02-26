@@ -125,7 +125,7 @@ public class  UserManager {
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             Usuaris foundUser;
             tx = session.beginTransaction();
-            Query<Usuaris> query = session.createQuery("FROM User WHERE telephone = :telephone", Usuaris.class);
+            Query<Usuaris> query = session.createQuery("FROM Usuaris WHERE telephone = :telephone", Usuaris.class);
             query.setParameter("telephone", user.getTelephone());
             foundUser = query.uniqueResult();
 
