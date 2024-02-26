@@ -1,38 +1,49 @@
-package cat.iesesteveterradas.dbapi.persistencia;
+package cat.iesesteveterradas.dbapi.persistencia.managers;
 
+import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.SessionFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SessionFactoryManager {
-    private static final Logger logger = LoggerFactory.getLogger(SessionFactoryManager.class);
-    private static SessionFactory factory;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionFactoryManager.class);
+    private SessionFactoryManager() {
+
+    }
+
+    private static final SessionFactory factory;
 
     static {
         try {
-            // 1. Create a StandardServiceRegistry with Hibernate configuration properties
             StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                    .configure() // Auto-detects entities and applies settings from annotations
+                    .configure()
                     .build();
-            // 2. Create a Metadata object from the registry
             Metadata metadata = new MetadataSources(registry).buildMetadata();
-            // 3. Build the SessionFactory from the metadata
             factory = metadata.getSessionFactoryBuilder().build();
+
         } catch (Throwable e) {
-            logger.error("Error en crear un objecte de classe sessionFactory.", e);
+            LOGGER.error("Error on sessionFactory object creation.", e);
             throw new ExceptionInInitializerError(e);
         }
     }
 
+    /**
+     * SessionFactory getter
+     *
+     * @return returns the current instance of SessionFactory
+     */
     public static SessionFactory getSessionFactory() {
         return factory;
     }
 
+    /**
+     * If the current SessionFactory instance is not null, closes it.
+     *
+     */
     public static void close() {
         if (factory != null) {
             factory.close();

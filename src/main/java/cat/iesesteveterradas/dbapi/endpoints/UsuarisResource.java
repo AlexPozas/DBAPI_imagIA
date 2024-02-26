@@ -1,62 +1,107 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
-import cat.iesesteveterradas.dbapi.persistencia.Peticions;
-import cat.iesesteveterradas.dbapi.persistencia.PeticionsDAO;
-import cat.iesesteveterradas.dbapi.persistencia.Usuaris;
-import cat.iesesteveterradas.dbapi.persistencia.UsuarisDAO;
-import cat.iesesteveterradas.dbapi.respostes.RespostaBasica;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.util.Base64;
-
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Path("/api/usuaris")
+import cat.iesesteveterradas.dbapi.persistencia.managers.CommonManager;
+import cat.iesesteveterradas.dbapi.persistencia.managers.UserManager;
+import cat.iesesteveterradas.dbapi.persistencia.taules.Usuaris;
+
+
+@Path("/user")
 public class UsuarisResource {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UsuarisResource.class);
+    private static final String ACCESS_KEY = "access_key";
+    private static final String NICKNAME = "nickname";
+    private static final String PHONE_NUMBER = "phone_number";
+    private static final String EMAIL = "email";
+
+    /**
+     * Endpoint for user registration
+     *
+     * @param data JSON containing new user data
+     * @return response with registration status
+     */
     @POST
-    @Path("/registrar")
+    @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registrarUsuari(String jsonInput) {
-        try {
-            JSONObject input = new JSONObject(jsonInput);
-            String telefon = input.optString("telefon", null);
-            String nickname = input.optString("nickname", null);
-            String email = input.optString("email", null);
+    public Response registerUser(String data) {
+        LOGGER.info("Received new user registration request");
 
-            if (telefon == null || telefon.trim().isEmpty() || nickname == null || nickname.trim().isEmpty() || email == null || email.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Un valor introduit is invalid o buit.\"}").build();
-            }
+        Usuaris user;
+        JSONObject responseData = new JSONObject();
+        JSONObject requestJson = new JSONObject(data);
+        user = new Usuaris(requestJson);
 
-            Usuaris nouUsuari = UsuarisDAO.trobaORegistreUsuaris(telefon, nickname, email);
+        if (UserManager.findUser(user) == null) {
+            LOGGER.info("User already exists");
 
-            // Prepara la resposta amb la nova configuració
-            JSONObject jsonResponse = new JSONObject();
-            jsonResponse.put("status", "OK");
-            jsonResponse.put("message", "Usuari registrat o trobat amb èxit");
-            JSONObject jsonData = new JSONObject();
-            jsonData.put("id", nouUsuari.getId());
-            jsonData.put("telefon", nouUsuari.getTelefon());
-            jsonData.put("nickname", nouUsuari.getNickname());
-            jsonData.put("email", nouUsuari.getEmail());
-            jsonResponse.put("data", jsonData);
+            responseData.put(NICKNAME, user.getNickname())
+                    .put(PHONE_NUMBER, user.getTelephone())
+                    .put(EMAIL, user.getEmail());
 
-            // Retorna la resposta
-            String prettyJsonResponse = jsonResponse.toString(4); // 4 espais per indentar
-            return Response.ok(prettyJsonResponse).build();
-        } catch (Exception e) {
-            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir el usuari a la base de dades\"}").build();
+            return CommonManager.buildResponse(
+                    Response.Status.CONFLICT,
+                    responseData,
+                    "User already exists");
         }
+
+        LOGGER.info("User successfully registered");
+
+        responseData.put(NICKNAME, user.getNickname())
+                .put(PHONE_NUMBER, user.getTelephone())
+                .put(EMAIL, user.getEmail());
+
+        return CommonManager.buildResponse(
+                Response.Status.OK,
+                responseData,
+                "User successfully registered");
+    }
+
+    /**
+     * Endpoint for user validation
+     *
+     * @param data request body
+     * @return server response
+     */
+    @POST
+    @Path("/validate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response validateUser(String data) {
+        LOGGER.info("Received new user validation request");
+
+        JSONObject responseData = new JSONObject();
+        JSONObject requestJson = new JSONObject(data);
+        Usuaris user = UserManager.findUserByTelephone(requestJson.getString(PHONE_NUMBER));
+
+        if (user == null) {
+            return CommonManager.buildResponse(
+                    Response.Status.BAD_REQUEST,
+                    responseData,
+                    "the phone number is not registered");
+        }
+
+        LOGGER.info("User validated");
+        user.setAccessKey(CommonManager.generateAccessKey(user));
+        UserManager.updateUser(user);
+
+
+        responseData.put(ACCESS_KEY, user.getAccessKey())
+                .put(NICKNAME, user.getNickname())
+                .put(PHONE_NUMBER, user.getTelephone())
+                .put(EMAIL, user.getEmail());
+
+        return CommonManager.buildResponse(
+                Response.Status.OK,
+                responseData,
+                "User successfully validated");
     }
 }

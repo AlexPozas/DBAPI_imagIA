@@ -6,14 +6,11 @@
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/dbapi</property>
-        <property name="hibernate.connection.username">usuari</property>
-        <property name="hibernate.connection.password">password</property>
+        <property name="hibernate.connection.username">admin</property>
+        <property name="hibernate.connection.password">123</property>
 
         <!-- JDBC connection pool (use the built-in) -->
-        <property name="hibernate.connection.pool_size">1</property>
-
-        <!-- SQL dialect -->
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.connection.pool_size">10</property>
 
         <!-- Enable Hibernate's automatic session context management -->
         <property name="hibernate.current_session_context_class">thread</property>
@@ -22,13 +19,14 @@
         <property name="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 
         <!-- Echo all executed SQL to stdout -->
-        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.show_sql">true</property>
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hibernate.hbm2ddl.auto">create</property>
 
         <!-- Specify the mapping resources -->
-        <mapping class="cat.iesesteveterradas.dbapi.persistencia.Usuaris"/>
-        <mapping class="cat.iesesteveterradas.dbapi.persistencia.Peticions"/>
+        <mapping class="cat.amd.dbapi.persistence.db.entities.User"/>
+        <mapping class="cat.amd.dbapi.persistence.db.entities.Model"/>
+        <mapping class="cat.amd.dbapi.persistence.db.entities.Request"/>
     </session-factory>
 </hibernate-configuration>

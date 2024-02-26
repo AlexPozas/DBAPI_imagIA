@@ -1,60 +1,43 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
-import cat.iesesteveterradas.dbapi.persistencia.Peticions;
-import cat.iesesteveterradas.dbapi.persistencia.PeticionsDAO;
-import cat.iesesteveterradas.dbapi.respostes.RespostaBasica;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.util.Base64;
-
 import org.json.JSONObject;
 
-@Path("/api/peticions")
+import cat.iesesteveterradas.dbapi.persistencia.managers.RequestManager;
+import cat.iesesteveterradas.dbapi.persistencia.taules.Peticions;
+
+import java.util.Map;
+
+@Path("/request")
 public class PeticionsResource {
 
     @POST
-    @Path("/afegir")
+    @Path("/insert")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response afegirPeticio(String jsonInput) {
-        try {
-            JSONObject input = new JSONObject(jsonInput);
-            String model = input.optString("model", null);
-            String prompt = input.optString("prompt", null);
-            String imatges = input.optString("imatges", null);
+    public Response insertRequest(String data) {
 
-            if (model == null || model.trim().isEmpty() || prompt == null || prompt.trim().isEmpty() || imatges == null || imatges.trim().isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("{\"status\":\"ERROR\",\"message\":\"Un valor introduit is invalid o buit.\"}").build();
-            }
+        boolean inserted;
+        Peticions request;
 
-            Peticions novaPeticio = PeticionsDAO.trobaOCreaPeticions(model, prompt, imatges);
+        JSONObject requestJson = new JSONObject(data);
+        request = new Peticions(requestJson);
+        request = RequestManager.insertRequest(request);
 
-            // Prepara la resposta amb la nova configuració
-            JSONObject jsonResponse = new JSONObject();
-            jsonResponse.put("status", "OK");
-            jsonResponse.put("message", "Peticio afegida o trobada amb èxit");
-            JSONObject jsonData = new JSONObject();
-            jsonData.put("id", novaPeticio.getId());
-            jsonData.put("model", novaPeticio.getModel());
-            jsonData.put("prompt", novaPeticio.getPrompts());
-            jsonData.put("imatges", novaPeticio.getImatges());
-            jsonResponse.put("data", jsonData);
+        inserted = request != null;
 
-            // Retorna la resposta
-            String prettyJsonResponse = jsonResponse.toString(4); // 4 espais per indentar
-            return Response.ok(prettyJsonResponse).build();
-        } catch (Exception e) {
-            return Response.serverError().entity("{\"status\":\"ERROR\",\"message\":\"Error en afegir la peticio a la base de dades\"}").build();
+        if (!inserted) {
+            return Response.serverError().build();
         }
+
+        RequestManager.storeRequestImages(requestJson.getJSONArray("images"), request);
+
+        return Response.accepted().build();
     }
 }
