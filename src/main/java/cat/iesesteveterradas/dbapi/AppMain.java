@@ -71,7 +71,7 @@ public class AppMain {
             cmd = parser.parse(options, args);
 
             String host = cmd.hasOption("host") ? cmd.getOptionValue("host") : "127.0.0.1";
-            int port = cmd.hasOption("port") ? Integer.parseInt(cmd.getOptionValue("port")) : 3306;
+            int port = cmd.hasOption("port") ? Integer.parseInt(cmd.getOptionValue("port")) : 8080;
 
             logger.info("Running hibernate...");
             runHibernate();
