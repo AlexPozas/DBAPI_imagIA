@@ -32,7 +32,7 @@ public class  UserManager {
 
         try {
             tx = session.beginTransaction();
-            Query<Usuaris> query = session.createQuery("FROM User WHERE nickname = :nickname", Usuaris.class);
+            Query<Usuaris> query = session.createQuery("FROM Usuaris WHERE nickname = :nickname", Usuaris.class);
             query.setParameter("nickname", nickname);
             user = query.uniqueResult();
 
@@ -66,7 +66,7 @@ public class  UserManager {
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             Usuaris foundUser;
             tx = session.beginTransaction();
-            Query<Usuaris> query = session.createQuery("FROM User WHERE telephone = :telephone", Usuaris.class);
+            Query<Usuaris> query = session.createQuery("FROM Usuaris WHERE telephone = :telephone", Usuaris.class);
             query.setParameter("telephone", telephone);
             foundUser = query.uniqueResult();
 
@@ -100,7 +100,7 @@ public class  UserManager {
 
         try (Session session = SessionFactoryManager.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
-            Query<Usuaris> query = session.createQuery("FROM User WHERE telephone = :telephone", Usuaris.class);
+            Query<Usuaris> query = session.createQuery("FROM Usuaris WHERE telephone = :telephone", Usuaris.class);
             query.setParameter("telephone", telephone);
             user = query.uniqueResult();
 
