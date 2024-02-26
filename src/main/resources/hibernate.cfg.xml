@@ -25,8 +25,8 @@
         <property name="hibernate.hbm2ddl.auto">create</property>
 
         <!-- Specify the mapping resources -->
-        <mapping class="cat.amd.dbapi.persistence.db.entities.User"/>
-        <mapping class="cat.amd.dbapi.persistence.db.entities.Model"/>
-        <mapping class="cat.amd.dbapi.persistence.db.entities.Request"/>
+        <mapping class="cat.amd.dbapi.persistence.db.taules.Usuaris"/>
+        <mapping class="cat.amd.dbapi.persistence.db.taules.Model"/>
+        <mapping class="cat.amd.dbapi.persistence.db.taules.Peticions"/>
     </session-factory>
 </hibernate-configuration>
