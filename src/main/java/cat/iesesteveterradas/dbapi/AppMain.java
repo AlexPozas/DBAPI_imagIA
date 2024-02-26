@@ -42,7 +42,7 @@ public class AppMain {
      */
     public static HttpServer runServer(String host, int port) {
         baseURI = String.format("http://%s:%d/api/", host, port);
-        final ResourceConfig rc = new ResourceConfig().packages("cat.amd.dbapi");
+        final ResourceConfig rc = new ResourceConfig().packages("cat.iesesteveterradas.dbapi");
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(baseURI), rc);
     }
