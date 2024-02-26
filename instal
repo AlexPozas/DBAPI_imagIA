@@ -1,0 +1,20 @@
+||Mariadb ||
+
+sudo apt update
+sudo apt install mariadb-server
+sudo systemctl status mariadb
+
+
+CONFIGUARACION
+
+sudo mysql_secure_installation
+en todas le ponemos no
+
+CREAR USUARIO Y CONTRASEÑA
+sudo mariadb
+
+GRANT ALL ON *.* TO 'admin'@'localhost' IDENTIFIED BY 'password' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+exit
+
