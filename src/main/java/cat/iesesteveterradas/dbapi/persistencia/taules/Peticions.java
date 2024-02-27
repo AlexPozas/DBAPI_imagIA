@@ -42,7 +42,7 @@ public class Peticions {
     }
 
     public Peticions(JSONObject data) {
-        JSONArray ja = new JSONArray(data.getString("images"));
+        JSONArray ja = new JSONArray(data.getJSONArray("images"));
         this.user = UserManager.findUser("admin");
         this.prompt = data.getString("prompt");
         this.model = ModelManager.findModelByName("llava");
