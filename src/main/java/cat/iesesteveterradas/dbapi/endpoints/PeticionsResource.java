@@ -1,12 +1,14 @@
 package cat.iesesteveterradas.dbapi.endpoints;
 
-
+import org.json.JSONArray;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import cat.iesesteveterradas.dbapi.persistencia.managers.RequestManager;
@@ -36,7 +38,7 @@ public class PeticionsResource {
             return Response.serverError().build();
         }
 
-        RequestManager.storeRequestImages(requestJson.getString("images"), request);
+        RequestManager.storeRequestImages(new JSONArray(requestJson.getJSONArray("images")).getString(0), request);
 
         return Response.accepted().build();
     }
