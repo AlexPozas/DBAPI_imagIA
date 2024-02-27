@@ -36,7 +36,7 @@ public class PeticionsResource {
             return Response.serverError().build();
         }
 
-        RequestManager.storeRequestImages(requestJson.getJSONArray("images"), request);
+        RequestManager.storeRequestImages(requestJson.getString("images"), request);
 
         return Response.accepted().build();
     }

@@ -77,12 +77,12 @@ public class RequestManager {
      * @param images JSONArray of images to store
      * @param request Request entity
      */
-    public static void storeRequestImages(JSONArray images, Peticions request) {
+    public static void storeRequestImages(String images, Peticions request) {
         String outputFilePath = "data/images/NAME/IMAGE.jpeg";
 
         for (int i = 0; i<images.length(); i++) {
-            JSONObject image = images.getJSONObject(i);
-            String base64 = image.getString("image");
+           
+            String base64 = images;
             byte[] imageBytes = Base64.getDecoder().decode(base64);
 
             String outputPath = outputFilePath
