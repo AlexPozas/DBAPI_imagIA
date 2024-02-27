@@ -64,7 +64,7 @@ public class Peticions {
 
 
         try {
-            this.imagePath =saveBase64Image(ja.getString(0),"//data/images");
+            this.imagePath =saveBase64Image(ja.getString(0),Paths.get(System.getProperty("user.dir")).toString());
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
