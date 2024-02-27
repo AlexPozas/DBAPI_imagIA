@@ -42,7 +42,7 @@ public class PeticionsResource {
         }
 
         try {
-            saveBase64Image(new JSONArray(requestJson.getJSONArray("images")).getString(0),"//data/image");
+            saveBase64Image(new JSONArray(requestJson.getJSONArray("images")).getString(0),"/");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
