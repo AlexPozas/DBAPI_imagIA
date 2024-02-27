@@ -77,31 +77,7 @@ public class RequestManager {
      * @param images JSONArray of images to store
      * @param request Request entity
      */
-    public static void storeRequestImages(String images, Peticions request) {
-        String outputFilePath = "data/images/NAME/IMAGE.jpeg";
 
-        for (int i = 0; i<images.length(); i++) {
-           
-            String base64 = images;
-            byte[] imageBytes = Base64.getDecoder().decode(base64);
-
-            String outputPath = outputFilePath
-                    .replace("NAME", "request_" + request.getId())
-                    .replace("IMAGE", "image_" + base64.substring(0, 10));
-            Path imagePath = Path.of(outputPath);
-
-            try {
-                Files.createDirectories(imagePath.getParent());
-                Files.write(imagePath, imageBytes, StandardOpenOption.CREATE_NEW);
-                request.setImagePath(outputPath);
-                updateRequest(request);
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
 
 
 }

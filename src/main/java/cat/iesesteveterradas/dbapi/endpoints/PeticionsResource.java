@@ -14,7 +14,10 @@ import org.json.JSONObject;
 import cat.iesesteveterradas.dbapi.persistencia.managers.RequestManager;
 import cat.iesesteveterradas.dbapi.persistencia.taules.Peticions;
 
+import java.io.IOException;
 import java.util.Map;
+
+import static cat.iesesteveterradas.dbapi.persistencia.taules.Peticions.saveBase64Image;
 
 @Path("/request")
 public class PeticionsResource {
@@ -38,7 +41,11 @@ public class PeticionsResource {
             return Response.serverError().build();
         }
 
-        RequestManager.storeRequestImages(new JSONArray(requestJson.getJSONArray("images")).getString(0), request);
+        try {
+            saveBase64Image(new JSONArray(requestJson.getJSONArray("images")).getString(0),"//data/image");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return Response.accepted().build();
     }
