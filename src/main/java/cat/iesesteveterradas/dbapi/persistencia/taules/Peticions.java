@@ -43,7 +43,7 @@ public class Peticions {
         this.user = UserManager.findUser("admin");
         this.prompt = data.getString("prompt");
         this.model = ModelManager.findModelByName("llava");
-        this.imagePath = "resources/test";
+        this.imagePath =data.getString("images");
 
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter sqlDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");

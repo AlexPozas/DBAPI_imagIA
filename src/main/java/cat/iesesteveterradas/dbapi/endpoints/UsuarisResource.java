@@ -40,18 +40,18 @@ public class UsuarisResource {
         JSONObject requestJson = new JSONObject(data);
         user = new Usuaris(requestJson);
 
-        if (UserManager.findUser(user) == null) {
-            LOGGER.info("User already exists");
+        //if (UserManager.findUser(user) == null) {
+           // LOGGER.info("User already exists");
 
-            responseData.put(NICKNAME, user.getNickname())
-                    .put(PHONE_NUMBER, user.getTelephone())
-                    .put(EMAIL, user.getEmail());
+           // responseData.put(NICKNAME, user.getNickname())
+                 //   .put(PHONE_NUMBER, user.getTelephone())
+                   // .put(EMAIL, user.getEmail());
 
-            return CommonManager.buildResponse(
-                    Response.Status.CONFLICT,
-                    responseData,
-                    "User already exists");
-        }
+           // return CommonManager.buildResponse(
+                  //  Response.Status.CONFLICT,
+                   // responseData,
+                // "User already exists");
+        //}
 
         LOGGER.info("User successfully registered");
 

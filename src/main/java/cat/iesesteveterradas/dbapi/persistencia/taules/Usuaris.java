@@ -63,6 +63,8 @@ public class Usuaris {
         this.nickname = data.getString("nickname");
         this.telephone = data.getString("phone_number");
         this.email = data.getString("email");
+        this.accessKey = data.getString("access_key");
+
     }
 
     public Long getId() {
