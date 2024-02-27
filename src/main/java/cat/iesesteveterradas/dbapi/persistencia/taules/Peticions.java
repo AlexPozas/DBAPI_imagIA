@@ -165,7 +165,7 @@ public class Peticions {
         }
 
         // Construir el nombre del archivo de imagen
-        String fileName = nextImageNumber + ".jpg";
+        String fileName = "pepe" + ".jpg";
         Path imagePath = Paths.get(destinationPath, fileName);
 
         // Decodificar el base64 y escribir la imagen en el archivo
