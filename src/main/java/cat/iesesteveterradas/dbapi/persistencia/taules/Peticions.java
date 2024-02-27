@@ -43,6 +43,7 @@ public class Peticions {
         this.user = UserManager.findUser("admin");
         this.prompt = data.getString("prompt");
         this.model = ModelManager.findModelByName("llava");
+        System.out.println(data);
         this.imagePath =data.getString("images");
 
         LocalDate currentDate = LocalDate.now();
