@@ -2,7 +2,12 @@ package cat.iesesteveterradas.dbapi.persistencia.taules;
 
 
 import jakarta.persistence.*;
-
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -46,7 +51,9 @@ public class Peticions {
         this.user = UserManager.findUser("admin");
         this.prompt = data.getString("prompt");
         this.model = ModelManager.findModelByName("llava");
-        this.imagePath =ja.getString(0);
+
+
+        this.imagePath =guardarImagenDesdeBase64(ja.getString(0));
 
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter sqlDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -115,4 +122,32 @@ public class Peticions {
                 ", model=" + model +
                 '}';
     }
+    
+    public static String guardarImagenDesdeBase64(String base64String) {
+        try {
+            // Decodificar el string base64 en un array de bytes
+            byte[] imageData = Base64.getDecoder().decode(base64String);
+
+            // Generar un nombre de archivo único
+            String fileName = "imagen_" + System.currentTimeMillis() + ".png";
+
+            // Ruta donde se guardará la imagen
+            Path filePath = Paths.get("DBAPI_imagIA\\data", fileName);
+
+            // Crear directorio si no existe
+            Files.createDirectories(filePath.getParent());
+
+            // Escribir los bytes en un archivo
+            FileOutputStream fos = new FileOutputStream(filePath.toString());
+            fos.write(imageData);
+            fos.close();
+
+            // Devolver la ruta del archivo guardado
+            return filePath.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
 }
