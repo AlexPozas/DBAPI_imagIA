@@ -2,6 +2,8 @@ package cat.iesesteveterradas.dbapi.persistencia.taules;
 
 
 import jakarta.persistence.*;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import cat.iesesteveterradas.dbapi.persistencia.managers.ModelManager;
@@ -40,11 +42,11 @@ public class Peticions {
     }
 
     public Peticions(JSONObject data) {
+        JSONArray ja = new JSONArray(data.getString("images"));
         this.user = UserManager.findUser("admin");
         this.prompt = data.getString("prompt");
         this.model = ModelManager.findModelByName("llava");
-        System.out.println(data);
-        this.imagePath =data.getString("images");
+        this.imagePath =ja.getString(0);
 
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter sqlDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
