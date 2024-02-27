@@ -1,5 +1,11 @@
 package cat.iesesteveterradas.dbapi.persistencia.taules;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 import jakarta.persistence.*;
 import java.io.FileOutputStream;
@@ -9,7 +15,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 import cat.iesesteveterradas.dbapi.persistencia.managers.ModelManager;
 import cat.iesesteveterradas.dbapi.persistencia.managers.UserManager;
@@ -53,7 +63,15 @@ public class Peticions {
         this.model = ModelManager.findModelByName("llava");
 
 
-        this.imagePath =guardarImagenDesdeBase64(ja.getString(0));
+        try {
+            this.imagePath =saveBase64Image(ja.getString(0),"//data/images");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter sqlDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -123,31 +141,42 @@ public class Peticions {
                 '}';
     }
     
-    public static String guardarImagenDesdeBase64(String base64String) {
-        try {
-            // Decodificar el string base64 en un array de bytes
-            byte[] imageData = Base64.getDecoder().decode(base64String);
+    public static String saveBase64Image(String base64Image, String relativePath) throws IOException {
+        String destinationPath = "data/imagen/" + relativePath; // Construye la ruta completa
 
-            // Generar un nombre de archivo único
-            String fileName = "imagen_" + System.currentTimeMillis() + ".png";
-
-            // Ruta donde se guardará la imagen
-            Path filePath = Paths.get("DBAPI_imagIA\\data", fileName);
-
-            // Crear directorio si no existe
-            Files.createDirectories(filePath.getParent());
-
-            // Escribir los bytes en un archivo
-            FileOutputStream fos = new FileOutputStream(filePath.toString());
-            fos.write(imageData);
-            fos.close();
-
-            // Devolver la ruta del archivo guardado
-            return filePath.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        // Verificar si la carpeta de destino existe
+        Path destFolderPath = Paths.get(destinationPath);
+        if (!Files.exists(destFolderPath)) {
+            Files.createDirectories(destFolderPath);
         }
+
+        // Listar archivos en el directorio destino
+        File[] files = new File(destinationPath).listFiles();
+        int nextImageNumber = 1;
+        if (files != null) {
+            // Encontrar el siguiente número de imagen disponible
+            nextImageNumber = Arrays.stream(files)
+                                    .filter(File::isFile)
+                                    .map(File::getName)
+                                    .filter(name -> name.matches("\\d+\\.jpg"))
+                                    .map(name -> Integer.parseInt(name.split("\\.")[0]))
+                                    .max(Integer::compareTo)
+                                    .orElse(0) + 1;
+        }
+
+        // Construir el nombre del archivo de imagen
+        String fileName = nextImageNumber + ".jpg";
+        Path imagePath = Paths.get(destinationPath, fileName);
+
+        // Decodificar el base64 y escribir la imagen en el archivo
+        byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+        try (FileOutputStream fos = new FileOutputStream(imagePath.toFile())) {
+            fos.write(imageBytes);
+        }
+
+        // Devolver el path relativo del archivo de imagen guardado
+        return Paths.get("data/imagen", relativePath, fileName).toString();
     }
+
     
 }
