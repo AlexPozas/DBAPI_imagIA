@@ -33,7 +33,7 @@ public class UsuarisResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(String data) {
-        LOGGER.info("Puta");
+        LOGGER.info("User registration request received");
 
         Usuaris user;
         JSONObject responseData = new JSONObject();
@@ -52,7 +52,7 @@ public class UsuarisResource {
                    // responseData,
                 // "User already exists");
         //}
-
+        CommonManager.insertRequest(user);
         LOGGER.info("User successfully registered");
 
         responseData.put(NICKNAME, "yuheng")

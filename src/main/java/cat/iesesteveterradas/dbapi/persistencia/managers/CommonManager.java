@@ -1,6 +1,8 @@
 package cat.iesesteveterradas.dbapi.persistencia.managers;
 
 
+import cat.iesesteveterradas.dbapi.endpoints.UsuarisResource;
+import cat.iesesteveterradas.dbapi.persistencia.taules.Peticions;
 import cat.iesesteveterradas.dbapi.persistencia.taules.Usuaris;
 
 import com.auth0.jwt.JWT;
@@ -10,15 +12,19 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.json.JSONObject;
 
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 public class CommonManager {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(UsuarisResource.class);
     private CommonManager() {
 
     }
@@ -76,6 +82,28 @@ public class CommonManager {
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .build();
 
+    }
+
+    public static Usuaris insertRequest(Usuaris user) {
+        Session session = SessionFactoryManager.getSessionFactory().openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            session.save(user);
+            tx.commit();
+            LOGGER.info("New user inserted: "+user.getNickname());
+            return user;
+
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback();
+            ;
+            LOGGER.error("Error trying to insert request from user  '{}'", user.getNickname(), e);
+        } finally {
+            session.close();
+        }
+
+        return null;
     }
 
     /**
