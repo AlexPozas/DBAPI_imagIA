@@ -58,6 +58,10 @@ public class Peticions {
     public Peticions() {
 
     }
+    public Peticions(long id) {
+        this.id= id;
+
+    }
 
     public Peticions(JSONObject data) {
         JSONArray ja = new JSONArray(data.getJSONArray("images"));

@@ -28,5 +28,6 @@
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.taules.Usuaris"/>
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.taules.Model"/>
         <mapping class="cat.iesesteveterradas.dbapi.persistencia.taules.Peticions"/>
+        <mapping class="cat.iesesteveterradas.dbapi.persistencia.taules.Respostes"/>
     </session-factory>
 </hibernate-configuration>
