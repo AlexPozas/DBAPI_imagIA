@@ -23,12 +23,15 @@ import java.io.FileOutputStream;
 
 import cat.iesesteveterradas.dbapi.persistencia.managers.ModelManager;
 import cat.iesesteveterradas.dbapi.persistencia.managers.UserManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Peticions {
+    private static final Logger LOGGER = LoggerFactory.getLogger(cat.iesesteveterradas.dbapi.persistencia.managers.RequestManager.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -58,7 +61,7 @@ public class Peticions {
 
     public Peticions(JSONObject data) {
         JSONArray ja = new JSONArray(data.getJSONArray("images"));
-        System.out.println(data.getString("user"));
+        LOGGER.info(data.getString("user"));
         this.user = UserManager.findUser("admin");
         this.prompt = data.getString("prompt");
         this.model = ModelManager.findModelByName("llava");
