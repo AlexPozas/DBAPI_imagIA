@@ -33,7 +33,7 @@ public class UsuarisResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(String data) {
-        LOGGER.info("Received new user registration request");
+        LOGGER.info("Puta");
 
         Usuaris user;
         JSONObject responseData = new JSONObject();
@@ -55,9 +55,9 @@ public class UsuarisResource {
 
         LOGGER.info("User successfully registered");
 
-        responseData.put(NICKNAME, "Yuheng")
-                .put(PHONE_NUMBER, "722641470")
-                .put(EMAIL, "yuheng@email.com");
+        responseData.put(NICKNAME, user.getNickname())
+                .put(PHONE_NUMBER, user.getTelephone())
+                .put(EMAIL, user.getEmail());
 
         return CommonManager.buildResponse(
                 Response.Status.OK,
