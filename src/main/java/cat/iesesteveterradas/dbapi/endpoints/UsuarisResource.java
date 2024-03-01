@@ -55,9 +55,9 @@ public class UsuarisResource {
 
         LOGGER.info("User successfully registered");
 
-        responseData.put(NICKNAME, user.getNickname())
-                .put(PHONE_NUMBER, user.getTelephone())
-                .put(EMAIL, user.getEmail());
+        responseData.put(NICKNAME, "yuheng")
+                .put(PHONE_NUMBER, "722641470")
+                .put(EMAIL, "awdawd@gmail.com");
 
         return CommonManager.buildResponse(
                 Response.Status.OK,
