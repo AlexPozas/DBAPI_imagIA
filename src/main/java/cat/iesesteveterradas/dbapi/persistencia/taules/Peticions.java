@@ -61,8 +61,8 @@ public class Peticions {
 
     public Peticions(JSONObject data) {
         JSONArray ja = new JSONArray(data.getJSONArray("images"));
-        LOGGER.info(data.getString("user"));
-        this.user = UserManager.findUser("admin");
+        LOGGER.info(data.getString("user")+"'s request added");
+        this.user = UserManager.findUser(data.getString("user"));
         this.prompt = data.getString("prompt");
         this.model = ModelManager.findModelByName("llava");
 
