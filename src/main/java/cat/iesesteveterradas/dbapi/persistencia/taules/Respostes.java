@@ -5,12 +5,14 @@ import org.json.JSONObject;
 import cat.iesesteveterradas.dbapi.persistencia.managers.RespostesManager;
 import cat.iesesteveterradas.dbapi.persistencia.managers.UserManager;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+@Entity
 public class Respostes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
