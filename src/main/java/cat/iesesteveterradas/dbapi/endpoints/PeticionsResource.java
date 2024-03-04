@@ -45,8 +45,20 @@ public class PeticionsResource {
             saveBase64Image(new JSONArray(requestJson.getJSONArray("images")).getString(0),"/");
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
 
-        return Response.accepted().build();
+            
+        }
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("status", "OK");
+        jsonResponse.put("message", "Peticio afegida o trobada amb èxit");
+        JSONObject jsonData = new JSONObject();
+        jsonData.put("id", request.getId());
+        jsonResponse.put("data", jsonData);
+        // Return the response
+        String prettyJsonResponse = jsonResponse.toString(4); // 4 espais per indentar
+        return Response.ok(prettyJsonResponse).build();
+        
+
+        
     }
 }

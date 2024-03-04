@@ -42,13 +42,8 @@ public class RespostaResource {
         if (!inserted) {
             return Response.serverError().build();
         }
-
-        try {
-            saveBase64Image(new JSONArray(requestJson.getJSONArray("images")).getString(0),"/");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        
+    
         return Response.accepted().build();
     }
 }
