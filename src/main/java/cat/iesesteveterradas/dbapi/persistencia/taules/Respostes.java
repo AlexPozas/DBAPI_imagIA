@@ -11,9 +11,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Entity
 public class Respostes {
+    private static final Logger LOGGER = LoggerFactory.getLogger(cat.iesesteveterradas.dbapi.persistencia.managers.RespostesManager.class);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "resposta_id")
@@ -40,6 +43,8 @@ public class Respostes {
 
 
     public Respostes(JSONObject data) {
+        LOGGER.info("aqui esta1: "+data.toString().length());
+        LOGGER.info("aqui esta2: "+data.toString());
         this.resposta = data.getString("resposta");
         this.peticio =RespostesManager.findPeticio(data.getInt("id")) ;
        
