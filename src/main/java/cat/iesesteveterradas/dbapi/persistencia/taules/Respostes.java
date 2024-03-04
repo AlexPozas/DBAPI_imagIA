@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +30,7 @@ public class Respostes {
     private String resposta;
 
     
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "peticio_id")
     private Peticions peticio;
 
