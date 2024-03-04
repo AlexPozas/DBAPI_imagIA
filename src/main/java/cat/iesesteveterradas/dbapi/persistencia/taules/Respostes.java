@@ -46,7 +46,7 @@ public class Respostes {
         LOGGER.info("aqui esta1: "+data.toString().length());
         LOGGER.info("aqui esta2: "+data.toString());
         this.resposta = data.getString("resposta");
-        this.peticio =RespostesManager.findPeticio(data.getInt("id")) ;
+        this.peticio =RespostesManager.findPeticio(data.getInt("id_peticio")) ;
        
        
     }
