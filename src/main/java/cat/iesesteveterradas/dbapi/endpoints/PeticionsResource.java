@@ -55,7 +55,7 @@ public class PeticionsResource {
         jsonData.put("id", request.getId());
         jsonResponse.put("data", jsonData);
         // Return the response
-        String prettyJsonResponse = jsonResponse.toString(4); // 4 espais per indentar
+        String prettyJsonResponse = jsonResponse.toString(4); 
         return Response.ok(prettyJsonResponse).build();
         
 

@@ -87,8 +87,7 @@ public class UsuarisResource {
         }
 
         LOGGER.info("User validated");
-        user.setAccessKey(CommonManager.generateAccessKey(user));
-        UserManager.updateUser(user);
+    
 
 
         responseData.put(ACCESS_KEY, user.getAccessKey())

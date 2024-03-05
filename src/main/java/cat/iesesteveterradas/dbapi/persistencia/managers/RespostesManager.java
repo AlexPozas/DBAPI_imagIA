@@ -39,13 +39,13 @@ public class RespostesManager {
             tx = session.beginTransaction();
             session.save(request);
             tx.commit();
-            LOGGER.info("New request inserted from user '{}'", request.getPeticio().getId());
+            LOGGER.info("New answer inserted from request '{}'", request.getPeticio().getId());
             return request;
 
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();
             ;
-            LOGGER.error("Error trying to insert request from user  '{}'", request.getPeticio().getId(), e);
+            LOGGER.error("Error trying to insert answer from request  '{}'", request.getPeticio().getId(), e);
         } finally {
             session.close();
         }
